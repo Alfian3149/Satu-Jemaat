@@ -1,0 +1,144 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Nunito Sans', 'Segoe UI', sans-serif;
+  --color-church-cloud: #f4f8fa;
+  --color-church-sky-soft: #dceef5;
+  --color-church-sky: #72aec8;
+  --color-church-deep: #263a43;
+  --color-church-roof: #a66351;
+  --color-church-roof-dark: #7f493d;
+  --color-church-green: #70834a;
+  --color-church-violet: #7e668e;
+  --color-church-gold: #d9aa46;
+}
+
+@layer base {
+  html {
+    background: var(--color-church-cloud);
+  }
+
+  body {
+    font-family: var(--font-sans);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-size: 1rem;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-church-gold);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .form-control {
+    width: 100%;
+    min-height: 3.25rem;
+    border-radius: 0.875rem;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    padding: 0.75rem 1rem;
+    color: #0f172a;
+    transition:
+      border-color 150ms,
+      box-shadow 150ms;
+  }
+
+  .form-control::placeholder {
+    color: #94a3b8;
+  }
+
+  .form-control:focus {
+    border-color: var(--color-church-sky);
+    box-shadow: 0 0 0 4px rgb(114 174 200 / 0.18);
+    outline: none;
+  }
+
+  .field-label {
+    margin-bottom: 0.5rem;
+    display: block;
+    font-weight: 700;
+    color: #334155;
+  }
+
+  .primary-button {
+    display: inline-flex;
+    min-height: 3.25rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    border-radius: 0.875rem;
+    background: var(--color-church-deep);
+    padding: 0.75rem 1.25rem;
+    font-weight: 800;
+    color: white;
+    box-shadow: 0 8px 20px rgb(38 58 67 / 0.2);
+    transition:
+      background-color 150ms,
+      transform 150ms;
+  }
+
+  .primary-button:hover {
+    background: var(--color-church-roof-dark);
+  }
+
+  .primary-button:active {
+    transform: translateY(1px);
+  }
+
+  .primary-button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+
+  .secondary-button {
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgb(114 174 200 / 0.45);
+    background: var(--color-church-sky-soft);
+    padding: 0.625rem 1rem;
+    font-weight: 800;
+    color: var(--color-church-deep);
+  }
+}
+
+.figma-custom-code-fragment {
+  display: contents;
+}
+
+.figma-bypass-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 2147483647;
+  transform: translateY(-150%);
+  border-radius: 6px;
+  background: #111827;
+  color: #fff;
+  padding: 8px 12px;
+  font:
+    600 14px/1.2 system-ui,
+    sans-serif;
+  text-decoration: none;
+}
+
+.figma-bypass-link:focus {
+  transform: translateY(0);
+}
