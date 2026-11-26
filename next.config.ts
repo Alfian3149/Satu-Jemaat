@@ -18,6 +18,16 @@ const makePublicPreviewOrigin = (() => {
   }
 })()
 
+// `env` values are inlined at build time and override real environment variables.
+// Prefer an explicit site URL, then Figma's public URL, then the stable Vercel
+// production domain. Leave it unset locally so request origin is used instead of localhost.
+const configuredSiteURL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.FIGMA_PUBLIC_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : undefined)
+
 const nextConfig: NextConfig = {
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
@@ -60,7 +70,7 @@ const nextConfig: NextConfig = {
     },
   },
   env: {
-    NEXT_PUBLIC_SITE_URL: process.env.FIGMA_PUBLIC_URL || 'http://localhost:3000',
+    ...(configuredSiteURL ? { NEXT_PUBLIC_SITE_URL: configuredSiteURL } : {}),
     // NOTE: Do not add FIGMA_OAUTH_CLIENT_SECRET, FIGMA_CONTENT_API_ACCESS_KEY,
     // or any other credential here. Values placed in `env` are inlined into
     // the JavaScript bundle by Next.js at build time and become readable by

@@ -1,7 +1,9 @@
 import path from 'path'
 import { buildFigmaConfig } from '@payloadcms/figma'
 import { mcpPlugin } from '@payloadcms/plugin-mcp'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { en as adminLanguage } from '@payloadcms/translations/languages/en'
+import { buildConfig, type DatabaseAdapterResult } from 'payload'
 import { fileURLToPath } from 'url'
 import { Admins } from './collections/Admins'
 import { Media } from './collections/Media'
@@ -21,7 +23,27 @@ import { resendAdapter } from '@payloadcms/email-resend'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-export default buildFigmaConfig({
+// Figma Make injects these. Vercel does not. The public app reads Supabase,
+// so a Vercel build must not call buildFigmaConfig or it exits before compile.
+function figmaBackendConfigured() {
+  return Boolean(
+    process.env.FIGMA_EID ||
+      process.env.FIGMA_CONTENT_API_CONTENT_SYSTEM_ID ||
+      process.env.FIGMA_CONTENT_API_ACCESS_KEY,
+  )
+}
+
+const placeholderDb: DatabaseAdapterResult = {
+  name: 'vercel-placeholder',
+  defaultIDType: 'text',
+  init: () => {
+    throw new Error(
+      'Payload admin is not available on this deployment. The public app uses Supabase.',
+    )
+  },
+}
+
+const config = {
   admin: {
     user: Admins.slug,
     constrainWidth: true,
@@ -69,5 +91,16 @@ export default buildFigmaConfig({
     defaultLocale: 'en',
   },
   plugins: [mcpPlugin({})],
-  figma: {},
-})
+}
+
+export default figmaBackendConfigured()
+  ? buildFigmaConfig({
+      ...config,
+      figma: {},
+    })
+  : buildConfig({
+      ...config,
+      editor: lexicalEditor(),
+      secret: process.env.PAYLOAD_SECRET || 'satu-jemaat-public-app',
+      db: placeholderDb,
+    })
